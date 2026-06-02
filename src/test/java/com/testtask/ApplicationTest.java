@@ -8,63 +8,61 @@ import static org.junit.Assert.*;
 public class ApplicationTest {
 
     @Test
-    public void testCalculateEvenSum() {
-        List<Character> characters = Arrays.asList('A', 'B', 'C', 'D'); // 65, 67 odd, 66, 68 even
-        long expectedEvenSum = 66 + 68; // 134
-        assertEquals(expectedEvenSum, calculateEvenSum(characters));
+    public void testSingleCharacterOdd() {
+        // 'A' = 65 (odd)
+        List<Character> chars = Arrays.asList('A');
+        assertEquals(65, calculateDifference(chars));
     }
 
     @Test
-    public void testCalculateOddSum() {
-        List<Character> characters = Arrays.asList('A', 'B', 'C', 'D'); // 65, 67 odd, 66, 68 even
-        long expectedOddSum = 65 + 67; // 132
-        assertEquals(expectedOddSum, calculateOddSum(characters));
-    }
-
-    @Test
-    public void testCalculateDifference() {
-        List<Character> characters = Arrays.asList('A', 'B', 'C', 'D');
-        long expectedDiff = Math.abs((66 + 68) - (65 + 67)); // 2
-        assertEquals(expectedDiff, calculateDifference(characters));
+    public void testSingleCharacterEven() {
+        // 'B' = 66 (even)
+        List<Character> chars = Arrays.asList('B');
+        assertEquals(66, calculateDifference(chars));
     }
 
     @Test
     public void testEmptyList() {
-        List<Character> characters = Arrays.asList();
-        assertEquals(0, calculateEvenSum(characters));
-        assertEquals(0, calculateOddSum(characters));
-        assertEquals(0, calculateDifference(characters));
+        List<Character> chars = Arrays.asList();
+        assertEquals(0, calculateDifference(chars));
     }
 
     @Test
-    public void testSingleCharacter() {
-        List<Character> oddChar = Arrays.asList('A'); // 65 - odd
-        assertEquals(0, calculateEvenSum(oddChar));
-        assertEquals(65, calculateOddSum(oddChar));
-        assertEquals(65, calculateDifference(oddChar));
-
-        List<Character> evenChar = Arrays.asList('B'); // 66 - even
-        assertEquals(66, calculateEvenSum(evenChar));
-        assertEquals(0, calculateOddSum(evenChar));
-        assertEquals(66, calculateDifference(evenChar));
+    public void testMultipleCharacters() {
+        // A=65, B=66, C=67, D=68
+        // Even: 66+68=134, Odd: 65+67=132, Diff: 2
+        List<Character> chars = Arrays.asList('A', 'B', 'C', 'D');
+        assertEquals(2, calculateDifference(chars));
     }
 
-    // Helper methods mirroring Application logic
-    private long calculateEvenSum(List<Character> characters) {
-        return characters.stream()
-                .mapToLong(c -> (int) c)
-                .filter(v -> v % 2 == 0)
-                .sum();
+    @Test
+    public void testAllOddCharacters() {
+        // A=65, C=67, E=69
+        List<Character> chars = Arrays.asList('A', 'C', 'E');
+        long oddSum = 65 + 67 + 69;
+        assertEquals(oddSum, calculateDifference(chars));
     }
 
-    private long calculateOddSum(List<Character> characters) {
-        return characters.stream()
-                .mapToLong(c -> (int) c)
-                .filter(v -> v % 2 != 0)
-                .sum();
+    @Test
+    public void testAllEvenCharacters() {
+        // B=66, D=68, F=70
+        List<Character> chars = Arrays.asList('B', 'D', 'F');
+        long evenSum = 66 + 68 + 70;
+        assertEquals(evenSum, calculateDifference(chars));
     }
 
-    private long calculateDifference(List<Character> characters) {
-        return Math.abs(calculateEvenSum(characters) - calculateOddSum(characters));
+    // Helper methods matching Application logic
+    long calculateDifference(List<Character> characters) {
+        long evenSum = 0;
+        long oddSum = 0;
+        for (Character c : characters) {
+            int value = (int) c;
+            if (value % 2 == 0) {
+                evenSum += value;
+            } else {
+                oddSum += value;
+            }
+        }
+        return Math.abs(evenSum - oddSum);
     }
 }
